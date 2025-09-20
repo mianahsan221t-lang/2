@@ -42,11 +42,11 @@ on:
 
       runtime_minutes:
 
-        description: "Runtime in minutes (max 360; capped to 355)"
+        description: "Runtime in minutes (max 10080; capped to 10075)"
 
         required: false
 
-        default: "355"
+        default: "10080"
 
       loops:
 
@@ -108,7 +108,7 @@ jobs:
 
     runs-on: windows-2022
 
-    timeout-minutes: 370
+    timeout-minutes: 10080
 
     steps:
 
@@ -128,7 +128,7 @@ jobs:
 
           RAW_TEST:     ${{ inputs.test_mode == true && 'true' || 'false' }}
 
-          RAW_RUNTIME:  ${{ inputs.runtime_minutes || '355' }}
+          RAW_RUNTIME:  ${{ inputs.runtime_minutes || '10080' }}
 
           RAW_LOOPS:    ${{ inputs.loops || '0' }}
 
@@ -160,17 +160,17 @@ jobs:
 
 
 
-          $runtime = ToIntOr $env:RAW_RUNTIME 355
+          $runtime = ToIntOr $env:RAW_RUNTIME 10080
 
           if ($isTest) { $runtime = 5 }
 
 
 
-          # Ensure ~6h (355) when test_mode is off and value is too small
+          # Ensure ~168h (10080) when test_mode is off and value is too small
 
-          if (-not $isTest -and $runtime -lt 6) { $runtime = 355 }
+          if (-not $isTest -and $runtime -lt 168) { $runtime = 10080 }
 
-          if ($runtime -gt 360) { $runtime = 355 }
+          if ($runtime -gt 10080) { $runtime = 10080 }
 
 
 
